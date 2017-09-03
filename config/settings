@@ -1,11 +1,9 @@
 # Customize this file with your config
 
-# Network
-
+# Use the hostname that you configured in you DNS
 export DRONE_HOST=
 
-# Github
-
+# Github Settings
 export DRONE_OPEN=
 export DRONE_ORGS=
 export DRONE_ADMIN=

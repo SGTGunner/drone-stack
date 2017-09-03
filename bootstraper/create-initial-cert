@@ -5,6 +5,9 @@ set -e
 
 echo Obtaining brand-new letsencrypt certs and generating strong Diffie-Hellman parameters
 
+source ../config/secrets
+source ../config/settings
+
 docker-compose build
 
 docker-compose run --rm \
