@@ -14,4 +14,4 @@ CMD sed -i "s/\DOCKERFILE_WILL_REPLACE_WITH_DRONE_HOST/$DRONE_HOST/" /etc/nginx/
     && nginx \
     && certbot --nginx -d $DRONE_HOST \
     && ln -s /etc/letsencrypt/live/$DRONE_HOST /etc/letsencrypt/live/default \
-    && sudo openssl dhparam -out /etc/drone-stack/certs/dhparam.pem 2048
+    && openssl dhparam -out /etc/drone-stack/certs/dhparam.pem 2048
