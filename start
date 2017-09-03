@@ -6,4 +6,4 @@ set -e
 source config/settings
 source config/secrets
 
-docker-compose up --force-recreate
+docker-compose up --force-recreate -d
