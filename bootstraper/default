@@ -1,0 +1,12 @@
+server {
+       listen 80 default_server;
+       listen [::]:80;
+
+       server_name DOCKERFILE_WILL_REPLACE_WITH_DRONE_HOST;
+
+       root /var/www/default;
+
+       location / {
+               try_files $uri $uri/ =404;
+       }
+}

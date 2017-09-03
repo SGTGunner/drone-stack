@@ -1,0 +1,61 @@
+version: '2'
+
+services:
+  drone-server:
+    image: drone/drone:0.7
+    volumes:
+      - /var/lib/drone:/var/lib/drone/
+    restart: always
+    environment:
+      - DRONE_OPEN=${DRONE_OPEN}
+      - DRONE_ORGS=${DRONE_ORGS}
+      - DRONE_ADMIN=${DRONE_ADMIN}
+      - DRONE_HOST=${DRONE_HOST}
+      - DRONE_GITHUB=${DRONE_GITHUB}
+      - DRONE_GITHUB_CLIENT=${DRONE_GITHUB_CLIENT}
+      - DRONE_GITHUB_SECRET=${DRONE_GITHUB_SECRET}
+      - DRONE_SECRET=${DRONE_SECRET}
+
+  drone-agent:
+    image: drone/drone:0.7
+    # Using privileged:true to enable docker-within-docker builds.
+    privileged: true
+    command: agent
+    restart: always
+    links:
+      - drone-server
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_SERVER=ws://drone-server:8000/ws/broker
+      - DRONE_SECRET=${DRONE_SECRET}
+
+  # The nginx frontend container ensures that we have secure SSL connections.
+  nginx:
+    image: nginx
+    restart: always
+    command: nginx -g 'daemon off;'
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./site.conf:/etc/nginx/sites-enabled/site.conf:ro
+      - /etc/drone-stack/letsencrypt:/etc/letsencrypt:ro
+      - /etc/drone-stack/certs:/etc/drone-stack/certs:ro
+    links:
+      - drone-server
+    depends_on:
+      - drone-server
+
+  # This container emulates a cronjob by sleeping after the command completes
+  # and then relying on the restart:always option to repeat the cycle.
+  certbot-auto-renewer:
+    build: certbot-auto-renewer
+    restart: always
+    volumes:
+      - /etc/drone-stack/letsencrypt:/etc/letsencrypt
+    environment:
+      - DRONE_HOST=${DRONE_HOST}

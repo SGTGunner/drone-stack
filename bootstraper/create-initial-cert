@@ -1,0 +1,16 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
+set -e
+
+echo Obtaining brand-new letsencrypt certs and generating strong Diffie-Hellman parameters
+
+docker-compose build
+
+docker-compose run --rm \
+    -p 80:80 \
+    -p 443:443 \
+    -e DRONE_HOST=$DRONE_HOST \
+    certbot
+
+echo Done generating certs and keys

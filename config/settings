@@ -1,0 +1,12 @@
+# Customize this file with your config
+
+# Network
+
+export DRONE_HOST=
+
+# Github
+
+export DRONE_OPEN=
+export DRONE_ORGS=
+export DRONE_ADMIN=
+export DRONE_GITHUB=
