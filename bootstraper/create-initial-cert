@@ -3,10 +3,17 @@ cd "$(dirname "$0")"
 
 set -e
 
-echo Obtaining brand-new letsencrypt certs and generating strong Diffie-Hellman parameters
+if [[ $# -ne 1 ]] ; then
+    echo Usage:
+    echo   create-initial-cert [DRONE_HOST]
+    echo Example:
+    echo   create-initial-cert example.com
+    exit 0
+fi
 
-source ../config/settings
-source ../config/secrets
+DRONE_HOST=$1
+
+echo Obtaining brand-new letsencrypt certs and generating strong Diffie-Hellman parameters
 
 docker-compose build
 

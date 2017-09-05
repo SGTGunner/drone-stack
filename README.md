@@ -4,11 +4,11 @@ A docker-compose stack for drone.io with SSL proxy and automated certificate man
 
 ### drone.io
 
-The basic drone.io configuration is based on their documentation samples. See their docs for more information. 
+The basic drone.io configuration is based on examples from the drone.io documentation. See their docs for more information. 
 
 ### letsencrypt SSL certificates
 
-This repo includes a docker script simplify letsencrypt SSL certificate generation. A service that runs periodically to renew the certificate is also included as part of the main docker-compose deployment.
+This repo includes a docker script to simplify letsencrypt SSL certificate generation. Another service that runs periodically to renew the certificate is also included as part of the main docker-compose deployment.
 
 ### nginx
 
@@ -18,12 +18,11 @@ The nginx service is configured as a proxy that uses the SSL certificates obtain
 
 1. Configure a hostname on your DNS that points to the public IP of the server that will host this stack.
 
-2. Configure `config/settings` and `config/secrets`.  Documentation is provided within those files. 
-
-3. Once your DNS has updated to resolve to your host's IP address, you can now generate a new SSL certificate by running the bootstrapper interactive script.
+2. Once your DNS has updated to resolve to your host's IP address, you can now generate a new SSL certificate by running the bootstrapper interactive script.
 
     ```
-    ./bootstrapper/create-initial-cert
+    # Example
+    ./bootstrapper/create-initial-cert example.com
     ``` 
 
     All prompts should be straightforward. The last prompt regarding updating the nginx config is irrelevant because the bootstrapping container is isolated from the main proxy server.
@@ -41,19 +40,13 @@ The nginx service is configured as a proxy that uses the SSL certificates obtain
     Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 1
     ```
 
-4. Ensure that your config is loaded on startup by adding this to your `/etc/bash.rc`. (This is not an ideal approach, but suggestions to improve it are welcome.)  
+3. Before starting the stack, make sure that any required environment variables are set properly.  See  docker-compose.yaml to see which variables are needed.  Refer to the drone.io documentations for more information.  Customize docker-compose.yaml as needed by adding or removing environment variables.
+
+4. Start the docker-compose stack. 
 
     ```
-    # Add to bottom of /etc/bash.bashrc replacing [PATH_TO_REPO_ROOT]
-    
-    source [PATH_TO_REPO_ROOT]/config/settings
-    source [PATH_TO_REPO_ROOT]/config/secrets
-    ```
-
-5. Start the docker-compose stack by running 
-
-    ```
-    ./start
+    # Example
+    docker-compose up --force-recreate -d
     ```
 
 5. The app should be accessible by simply visiting https://[YOUR_HOST_NAME]

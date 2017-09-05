@@ -1,9 +1,0 @@
-#!/bin/bash
-cd "$(dirname "$0")"
-
-set -e
-
-source config/settings
-source config/secrets
-
-docker-compose up --force-recreate -d
