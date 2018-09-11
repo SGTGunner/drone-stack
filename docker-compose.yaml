@@ -2,7 +2,7 @@ version: '2'
 
 services:
   drone-server:
-    image: drone/drone:0.7
+    image: drone/drone:0.8.6
     volumes:
       - /var/lib/drone-stack/drone:/var/lib/drone
     restart: always
@@ -18,12 +18,12 @@ services:
       - DRONE_GITHUB_CLIENT=${DRONE_GITHUB_CLIENT}
       - DRONE_GITHUB_SECRET=${DRONE_GITHUB_SECRET}
       # Bitbucket Integration
-      - DRONE_BITBUCKET=${DRONE_BITBUCKET}
-      - DRONE_BITBUCKET_CLIENT=${DRONE_BITBUCKET_CLIENT}
-      - DRONE_BITBUCKET_SECRET=${DRONE_BITBUCKET_SECRET}
+      # - DRONE_BITBUCKET=${DRONE_BITBUCKET}
+      # - DRONE_BITBUCKET_CLIENT=${DRONE_BITBUCKET_CLIENT}
+      # - DRONE_BITBUCKET_SECRET=${DRONE_BITBUCKET_SECRET}
 
   drone-agent:
-    image: drone/drone:0.7
+    image: drone/drone:0.8.6
     # Using privileged:true to enable docker-within-docker builds.
     privileged: true
     command: agent
@@ -40,7 +40,7 @@ services:
 
   # The nginx frontend container ensures that we have secure SSL connections.
   nginx:
-    image: nginx
+    image: sgtgunner/nginx:1.15.3-alpine
     restart: always
     command: nginx -g 'daemon off;'
     ports:
